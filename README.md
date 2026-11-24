@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/icon.svg" width="75" alt="The Triflare Kamix logo" style="padding-bottom: 20px;"/>
+<img src="docs-assets/icon.svg" width="75" alt="The Triflare Kamix logo" style="padding-bottom: 20px;"/>
 
 # Triflare Kamix
 
