@@ -23,6 +23,12 @@
     "check": "npm run format && npm run lint && npm run test"
   },
   "devDependencies": {
-    "@triflare/fx": "^2.2.0-alpha.4"
+    "@semantic-release/changelog": "^7.0.0",
+    "@semantic-release/exec": "^7.1.0",
+    "@semantic-release/git": "^11.0.1",
+    "@triflare/fx": "^2.2.0-alpha.4",
+    "conventional-changelog-conventionalcommits": "^8.0.0",
+    "prettier": "^3.10.1",
+    "semantic-release": "^25.0.9"
   }
 }

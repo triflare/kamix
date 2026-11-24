@@ -1,0 +1,58 @@
+name: Continuous Deployment
+
+on:
+  workflow_run:
+    workflows: [Continuous Integration]
+    types: [completed]
+    branches: [latest, beta, alpha]
+
+concurrency:
+  group: release-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.event == 'push' && github.event.workflow_run.conclusion == 'success' }}
+    outputs:
+      released: ${{ steps.release.outputs.released }}
+      version: ${{ steps.release.outputs.version }}
+      channel: ${{ steps.release.outputs.channel }}
+    steps:
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          owner: triflare
+          repositories: kamix
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+          fetch-depth: 0
+          persist-credentials: true
+          token: ${{ steps.app-token.outputs.token }}
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 26
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Release
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GITHUB_REF: refs/heads/${{ github.event.workflow_run.head_branch }}
+          GITHUB_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          echo "released=false" >> "$GITHUB_OUTPUT"
+          npx semantic-release

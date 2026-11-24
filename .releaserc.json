@@ -1,0 +1,49 @@
+{
+  "branches": [
+    "latest",
+    { "name": "beta", "prerelease": "beta", "channel": "beta" },
+    { "name": "alpha", "prerelease": "alpha", "channel": "alpha" }
+  ],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits",
+        "releaseRules": [
+          { "type": "hotfix", "release": "patch" },
+          { "type": "build", "release": false }
+        ]
+      }
+    ],
+    ["@semantic-release/release-notes-generator", { "preset": "conventionalcommits" }],
+    ["@semantic-release/changelog", { "changelogFile": "CHANGELOG.md" }],
+    ["@semantic-release/npm", { "npmPublish": false }],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "npx prettier --write CHANGELOG.md",
+        "publishCmd": "npm run build",
+        "successCmd": "node scripts/release-output.js ${nextRelease.version} ${nextRelease.channel}"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md", "package.json", "package-lock.json"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "build/*.pmp",
+            "name": "triflare-kamix-${nextRelease.version}.pmp",
+            "label": "PenguinMod project"
+          }
+        ]
+      }
+    ]
+  ]
+}
