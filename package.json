@@ -1,0 +1,28 @@
+{
+  "name": "@triflare/kamix",
+  "version": "1.0.0-alpha.1",
+  "description": "The OS runtime layer with NT structure and Unix discipline.",
+  "homepage": "https://github.com/triflare/kamix#readme",
+  "bugs": {
+    "url": "https://github.com/triflare/kamix/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/triflare/kamix.git"
+  },
+  "license": "Apache-2.0",
+  "author": "Triflare",
+  "type": "module",
+  "scripts": {
+    "test": "fx test",
+    "format": "fx fmt",
+    "format:check": "fx fmt --check",
+    "lint": "fx lint",
+    "dev": "fx dev",
+    "build": "fx build",
+    "check": "npm run format && npm run lint && npm run test"
+  },
+  "devDependencies": {
+    "@triflare/fx": "^2.2.0-alpha.4"
+  }
+}

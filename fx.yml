@@ -1,0 +1,18 @@
+project:
+  name: "Triflare Kamix"
+  fps: 60
+  width: 480
+  height: 360
+  turbo: false
+  interpolation: true
+
+fx:
+  partialSprites: true
+  run: true
+  tests: true
+
+package:
+  target: zip
+
+features:
+  temporaryvariables: "./extensions/fx-tempvars.js"
